@@ -12,9 +12,9 @@ export const register = async (registerInfo) => {
   });
   const json = await response.json();
   if (!response.ok) {
-    return { error: true, message: json.message };
+    return { error: true, message: json };
   }
-  return { error: false, message: json.message };
+  return { error: false, message: json };
 };
 
 export const login = async (loginInfo) => {
@@ -29,6 +29,7 @@ export const login = async (loginInfo) => {
   if (!response.ok) {
     return { error: true, message: json.message };
   }
+  localStorage.setItem("user", JSON.stringify(json));
   return { error: false, message: json.message };
 };
 

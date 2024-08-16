@@ -1,22 +1,16 @@
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/auth";
+
 const Login = () => {
+  const navigate = useNavigate();
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid Email !").required("Email is required."),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters.")
       .required("Password is required."),
   });
-  const handleLogin = async (loginInfo) => {
-    const message = await login(loginInfo);
-    if (message.error) {
-      console.log(message.message);
-      return;
-    }
-    // handle successful login here
-  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
@@ -30,8 +24,13 @@ const Login = () => {
             password: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            // handle login logic here
+          onSubmit={async (values) => {
+            const res = await login(values);
+            if (res.error) {
+              console.log(res.message);
+              return;
+            }
+            navigate("/");
           }}
         >
           {({
@@ -79,9 +78,6 @@ const Login = () => {
                   onBlur={handleBlur("password")}
                   value={values.password}
                 />
-                {errors.password && touched.password && (
-                  <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-                )}
               </div>
               <div className="mb-6">
                 <button

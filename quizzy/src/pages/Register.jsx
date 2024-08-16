@@ -55,16 +55,13 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     if (validateData()) {
-      const result = await register(userInfo);
-      if (result.error) {
-        setServerError(result.message || {});
+      const message = await register(userInfo);
+      if (message.error) {
+        setServerError(message.message);
+        console.log(message.message);
         return;
       }
-
       navigate("/verification-sent");
-    } else {
-      console.log(error);
-      console.log("Data is invalid. Cannot submit");
     }
   };
 
@@ -95,7 +92,7 @@ const Register = () => {
               )}
               {serverError?.username && (
                 <p className="text-red-500 text-xs mt-1">
-                  {serverError.username}
+                  {serverError?.username}
                 </p>
               )}
             </label>
@@ -119,7 +116,9 @@ const Register = () => {
                 <p className="text-red-500 text-xs mt-1">{error.email}</p>
               )}
               {serverError?.email && (
-                <p className="text-red-500 text-xs mt-1">{serverError.email}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {serverError?.email}
+                </p>
               )}
             </label>
           </div>
@@ -143,7 +142,7 @@ const Register = () => {
               )}
               {serverError?.password1 && (
                 <p className="text-red-500 text-xs mt-1">
-                  {serverError.password1}
+                  {serverError?.password1[0]}
                 </p>
               )}
             </label>
@@ -166,9 +165,9 @@ const Register = () => {
               {error.password2 && (
                 <p className="text-red-500 text-xs mt-1">{error.password2}</p>
               )}
-              {serverError.password2 && (
+              {serverError?.password2 && (
                 <p className="text-red-500 text-xs mt-1">
-                  {serverError?.password2}
+                  {serverError?.password2[0]}
                 </p>
               )}
             </label>
